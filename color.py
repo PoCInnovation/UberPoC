@@ -35,7 +35,6 @@ class ImageZone:
             self.w = self.x + self.w - img_w
         if self.y + self.h > img_h:
             self.h = self.y + self.h - img_h
-        #self.img_arr = self.img_arr.crop((self.x, self.y, self.w, self.h))
         return self
 
     """
