@@ -57,7 +57,6 @@ class ImageZone:
 
     def get_palette(self, nb_colors):
         img = self.img_arr.copy()
-        img = img.resize((300, 300))
         paletted = img.quantize(colors=nb_colors)
         print([[paletted.getpalette()[j * 3 + i] for i in range(3)] for j in range(nb_colors)])
         paletted.save("test.png")
