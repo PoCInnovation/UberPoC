@@ -19,6 +19,7 @@ class ImageZone:
         self.w = w
         self.h = h
         self.arr = arr
+        self.palette = list()
         self.img_arr = Image.fromarray(arr)
 
     """
@@ -39,7 +40,6 @@ class ImageZone:
 
     """
         get_major_color : From a Pixel array, return the dominant color of a specific area
-
         Arguments : img_array : np.array, area: ImageZone
         Return : (R, G, B): tuple , covered_area: float
     """
@@ -58,7 +58,8 @@ class ImageZone:
     def get_palette(self, nb_colors):
         img = self.img_arr.copy()
         paletted = img.quantize(colors=nb_colors)
-        print([[paletted.getpalette()[j * 3 + i] for i in range(3)] for j in range(nb_colors)])
+        self.palette = [[paletted.getpalette()[j * 3 + i] for i in range(3)] for j in range(nb_colors)]
+        print(self.palette)
         paletted.save("test.png")
 
     def __str__(self):
