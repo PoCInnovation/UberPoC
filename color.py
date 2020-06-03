@@ -10,7 +10,7 @@ import numpy as np
 import pyglet
 from pyglet.window import key
 from PIL import Image
-
+import cv2
 
 class ImageZone:
     def __init__(self, x, y, w, h, arr: np.ndarray):
@@ -18,9 +18,8 @@ class ImageZone:
         self.y = y
         self.w = w
         self.h = h
-        self.arr = arr
+        self.arr = arr[self.y:self.h, self.x:self.w]
         self.palette = list()
-        self.img_arr = Image.fromarray(arr)
 
     """
         reshape : Resize the rect to fit the size of the image
@@ -28,50 +27,15 @@ class ImageZone:
         Arguments : img_w, img_h
         Return : self
     """
-    def reshape(self):
-        img_h, img_w, channels = self.arr.shape
-        if self.x > img_w or self.y > img_h:
-            raise ValueError
-        if self.x + self.w > img_w:
-            self.w = self.x + self.w - img_w
-        if self.y + self.h > img_h:
-            self.h = self.y + self.h - img_h
-        return self
-
-    """
-        get_major_color : From a Pixel array, return the dominant color of a specific area
-        Arguments : img_array : np.array, area: ImageZone
-        Return : (R, G, B): tuple , covered_area: float
-    """
-    def get_major_color(self):
-        dom_r, dom_g, dom_b = 0, 0, 0
-        div = self.w * self.h
-
-        for off_y in range(self.w):
-            for off_x in range(self.h):
-                pixel = self.arr[self.y + off_y, self.x + off_x]
-                dom_r += pixel[0]
-                dom_g += pixel[1]
-                dom_b += pixel[2]
-        return dom_r / div, dom_g / div, dom_b / div
 
     def get_palette(self, nb_colors):
-        paletted = self.img_arr.copy().quantize(colors=nb_colors)
+        paletted = Image.fromarray(self.arr).quantize(colors=nb_colors)
         self.palette = [[paletted.getpalette()[j * 3 + i] for i in range(3)] for j in range(nb_colors)]
-        print(self.palette)
-        paletted.save("test.png")
         return self.palette
 
-    def normalize(self, rgb: int):
-        im = self.img_arr.copy()
-        r, g, b = im.split()
-        size = im.size
-        new_g = Image.new("L", size)
-        new_b = Image.new("L", size)
-        del im
-        im = Image.merge("RGB", (r, new_g, new_b))
-        im.save("test2.png")
-        pass
+    def normalize(self):
+        self.arr = cv2.cvtColor(self.arr, cv2.COLOR_RGB2HSV)
+        cv2.imwrite("test.png", self.arr)
 
     def __str__(self):
         return f"ImageZone: x: {self.x}, y: {self.y}, w: {self.w}, h: {self.h}"
@@ -96,9 +60,8 @@ action = np.array([0.3, 0.00])
 obs, reward, done, info = env.step(action)
 env.render()
 img_h, img_w, nb_channels = obs.shape
-area = ImageZone(600, 400, 4, 4, obs)
-area.reshape()
-palette = [0, 0, 0, 59, 171, 53]
-area.normalize([])
+print(obs.shape)
+area = ImageZone(0, 0, 640, 480, obs)
+area.normalize()
 pyglet.app.run()
 env.close()
