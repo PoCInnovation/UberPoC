@@ -56,11 +56,22 @@ class ImageZone:
         return dom_r / div, dom_g / div, dom_b / div
 
     def get_palette(self, nb_colors):
-        img = self.img_arr.copy()
-        paletted = img.quantize(colors=nb_colors)
+        paletted = self.img_arr.copy().quantize(colors=nb_colors)
         self.palette = [[paletted.getpalette()[j * 3 + i] for i in range(3)] for j in range(nb_colors)]
         print(self.palette)
         paletted.save("test.png")
+        return self.palette
+
+    def normalize(self, rgb: int):
+        im = self.img_arr.copy()
+        r, g, b = im.split()
+        size = im.size
+        new_g = Image.new("L", size)
+        new_b = Image.new("L", size)
+        del im
+        im = Image.merge("RGB", (r, new_g, new_b))
+        im.save("test2.png")
+        pass
 
     def __str__(self):
         return f"ImageZone: x: {self.x}, y: {self.y}, w: {self.w}, h: {self.h}"
@@ -87,6 +98,7 @@ env.render()
 img_h, img_w, nb_channels = obs.shape
 area = ImageZone(600, 400, 4, 4, obs)
 area.reshape()
-area.get_palette(16)
+palette = [0, 0, 0, 59, 171, 53]
+area.normalize([])
 pyglet.app.run()
 env.close()
