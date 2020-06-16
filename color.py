@@ -7,6 +7,7 @@ from gym_duckietown.envs import DuckietownEnv
 from gym_duckietown.wrappers import UndistortWrapper
 
 import numpy as np
+from numpy import asarray
 import pyglet
 from pyglet.window import key
 from PIL import Image
@@ -41,27 +42,43 @@ class ImageZone:
         return f"ImageZone: x: {self.x}, y: {self.y}, w: {self.w}, h: {self.h}"
 
 
-env = gym.make("Duckietown-udem1-v0")
+# env = gym.make("Duckietown-udem1-v0")
+#
+# env.reset()
+# env.render()
+#
+#
+# @env.unwrapped.window.event
+# def on_key_press(symbol, modifier):
+#     if symbol == key.ESCAPE:
+#         env.close()
+#         sys.exit(0)
 
-env.reset()
-env.render()
+# key_handler = key.KeyStateHandler()
+# env.unwrapped.window.push_handlers(key_handler)
+#
+# action = np.array([0.3, 0.00])
+# obs, reward, done, info = env.step(action)
+# env.render()
+# img_h, img_w, nb_channels = obs.shape
+# print(obs.shape)
+# area = ImageZone(0, 0, 640, 480, obs)
+# area.normalize()
+# pyglet.app.run()
+# env.close()
 
+cap = cv2.VideoCapture("Full Self-Driving.mp4")
+if cap.isOpened() is False:
+    sys.exit(1)
+while cap.isOpened():
+    ret, frame = cap.read()
+    if ret is False:
+        break
+    area = ImageZone(0, 0, 720, 480, frame)
+    area.normalize()
+    cv2.imshow("Vid", area.arr)
+    if cv2.waitKey(25) & 0xFF == ord('q'):
+        break
 
-@env.unwrapped.window.event
-def on_key_press(symbol, modifier):
-    if symbol == key.ESCAPE:
-        env.close()
-        sys.exit(0)
-
-key_handler = key.KeyStateHandler()
-env.unwrapped.window.push_handlers(key_handler)
-
-action = np.array([0.3, 0.00])
-obs, reward, done, info = env.step(action)
-env.render()
-img_h, img_w, nb_channels = obs.shape
-print(obs.shape)
-area = ImageZone(0, 0, 640, 480, obs)
-area.normalize()
-pyglet.app.run()
-env.close()
+cap.release()
+cv2.destroyAllWindows()
