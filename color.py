@@ -72,9 +72,9 @@ obs, reward, done, info = env.step(action)
 #pyglet.app.run()
 print(obs.shape)
 area = ImageZone(0,0,640,480, obs)
-imcv = cv2.cvtColor(obs, cv2.COLOR_RGB2BGR)
+area.normalize()
 while True:
     if cv2.waitKey(25) & 0xFF == ord('q'):
         break
-    cv2.imshow("tets", imcv)
+    cv2.imshow("tets", area.arr)
 env.close()
