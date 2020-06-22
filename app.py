@@ -1,10 +1,8 @@
 #! /usr/bin/env python3
 
-import sys
 import argparse
-import numpy as np
-import cv2
 from visualizer import *
+
 
 class App:
 
@@ -19,13 +17,12 @@ class App:
     def parse(self):
         args = self.parser.parse_args()
         if args.duckietown:
-            duckietown_vis = ControlledVisualizer("Duckietown-udem-v0")
-            duckietown_vis.run()
+            vis = ControlledVisualizer("Duckietown-udem1-v0")
         elif args.video_name is not None:
-            video_vid = VideoVisualizer(args.video_name)
-            video_vid.run()
+            vis = VideoVisualizer(args.video_name)
         else:
             raise ValueError("No valid arguments passed")
+        vis.run()
 
     @staticmethod
     def help():
@@ -38,7 +35,6 @@ if __name__ == '__main__':
         app.config_parser().parse()
     except ValueError as e:
         print(e)
-        App.help()
 
 
 
