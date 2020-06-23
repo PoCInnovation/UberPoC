@@ -35,6 +35,8 @@ if __name__ == '__main__':
         app.config_parser().parse()
     except ValueError as e:
         print(e)
+    except FileNotFoundError as e:
+        print(e)
 
 
 

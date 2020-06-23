@@ -5,6 +5,7 @@ from pyglet.gl import *
 from PIL import Image
 
 import numpy as np
+from color import ImageZone
 
 import gym
 import gym_duckietown
@@ -25,7 +26,6 @@ class Visualizer(pyglet.window.Window):
             sys.exit(0)
 
     def on_close(self):
-        self.close()
         sys.exit(0)
 
     def cv2glet(self, img):
@@ -70,7 +70,7 @@ class ControlledVisualizer(Visualizer):
         super().show(obs)
 
     def update(self, dt):
-        action = np.array([0, 0])
+        action = np.array([0.0, 0.0])
 
         if self.key_handler[key.UP]:
             action = np.array([0.44, 0.0])
@@ -101,7 +101,13 @@ class VideoVisualizer(Visualizer):
 
     def __init__(self, file):
         super().__init__(duckietown=False)
-        self.cap = None
+        self.file = file
+        self.cap = cv2.VideoCapture(file)
+        if self.cap.isOpened() is False:
+            raise FileNotFoundError(f"{file}: file not found")
+        width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.set_size(int(width), int(height))
 
     def show(self, obs):
         result = obs
@@ -111,9 +117,19 @@ class VideoVisualizer(Visualizer):
         super().on_key_press(symbol, modifiers)
 
     def update(self, dt):
-        a = np.array([])
-        self.show(a)
+        if self.cap.isOpened() is False:
+            sys.exit(1)
+        ret, frame = self.cap.read()
+        if ret is False:
+            self.close()
+        # treatment of the frame with your code returning a result frame
+        area = ImageZone(0, 0, 640, 480, frame)
+        self.show(area.arr)
 
     def run(self):
-        pyglet.clock.schedule_interval(self.update, 1.0 / self.frame_rate)
+        fps = self.cap.get(cv2.CAP_PROP_FPS)
+        pyglet.clock.schedule_interval(self.update, 1.0 / fps)
         super().run()
+
+    def __del__(self):
+        self.cap.release()
