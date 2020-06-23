@@ -1,8 +1,6 @@
 #! /usr/bin/env python3
 
 import argparse
-from visualizer import *
-
 
 class App:
 
@@ -17,8 +15,10 @@ class App:
     def parse(self):
         args = self.parser.parse_args()
         if args.duckietown:
+            from visualizer.controlled import ControlledVisualizer
             vis = ControlledVisualizer("Duckietown-udem1-v0")
         elif args.video_name is not None:
+            from visualizer.video import VideoVisualizer
             vis = VideoVisualizer(args.video_name)
         else:
             raise ValueError("No valid arguments passed")
