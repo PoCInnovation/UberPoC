@@ -62,19 +62,19 @@ class ImageZone:
 #
 # cap.release()
 # cv2.destroyAllWindows()
-env = gym.make("Duckietown-udem1-v0")
-env.reset()
-#env.render()
-
-action = np.array([0.3, 0.00])
-obs, reward, done, info = env.step(action)
-#env.render()
-#pyglet.app.run()
-print(obs.shape)
-area = ImageZone(0,0,640,480, obs)
-area.normalize()
-while True:
-    if cv2.waitKey(25) & 0xFF == ord('q'):
-        break
-    cv2.imshow("tets", area.arr)
-env.close()
+# env = gym.make("Duckietown-udem1-v0")
+# env.reset()
+# #env.render()
+#
+# action = np.array([0.3, 0.00])
+# obs, reward, done, info = env.step(action)
+# #env.render()
+# #pyglet.app.run()
+# print(obs.shape)
+# area = ImageZone(0,0,640,480, obs)
+# area.normalize()
+# while True:
+#     if cv2.waitKey(25) & 0xFF == ord('q'):
+#         break
+#     cv2.imshow("tets", area.arr)
+# env.close()
