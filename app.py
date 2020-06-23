@@ -21,6 +21,7 @@ class App:
             from visualizer.video import VideoVisualizer
             vis = VideoVisualizer(args.video_name)
         else:
+            self.help()
             raise ValueError("No valid arguments passed")
         vis.run()
 
