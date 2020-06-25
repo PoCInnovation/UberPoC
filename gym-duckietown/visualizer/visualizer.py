@@ -10,7 +10,7 @@ def Cropped(result):
     
     height, width = result.shape
     mask = np.zeros_like(result)
-    polygon = np.array([[(0, height * 1 / 5), (width, height * 1 / 5), (width, height), (0, height), ]], np.int32)
+    polygon = np.array([[(0, height * 2 / 3), (width, height * 2 / 3), (width, height), (0, height), ]], np.int32)
     cv2.fillPoly(mask, polygon, 255)
     cropped_edges = cv2.bitwise_and(result, mask)
 
@@ -33,7 +33,7 @@ def HoughLine(cropped_edges, threshold):
     rho = 1
     angle = np.pi / 180
     min_threshold = threshold
-    line_segments = cv2.HoughLinesP(cropped_edges, rho, angle, min_threshold, np.array([]), minLineLength=10, maxLineGap=2000)
+    line_segments = cv2.HoughLinesP(cropped_edges, rho, angle, min_threshold, np.array([]), minLineLength=1, maxLineGap=2000)
 
     return line_segments
 
@@ -144,10 +144,10 @@ class Visualizer(pyglet.window.Window):
                 result = display_lines(result, average)
         else:
             if self.masks["normalized"] is True:
-                result = Canny_cropped(result, 230)
+                result = Canny_cropped(result, 225)
             if self.masks["lines"] is True:
-                cropped = Canny_cropped(result, 230)
-                line_seg = HoughLine(cropped, 120)
+                cropped = Canny_cropped(result, 225)
+                line_seg = HoughLine(cropped, 90)
                 average = average_lines(result, line_seg)
                 result = display_lines(result, average)
         self.result = result
