@@ -135,21 +135,21 @@ class Visualizer(pyglet.window.Window):
 
         if self.duckietown is True:
             frame = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
-            if self.masks["normalized"] is True:
-                result = Canny_cropped(frame, 145)
             if self.masks["lines"] is True:
                 cropped = Canny_cropped(frame, 145)
                 line_seg = HoughLine(cropped, 60)
                 average = average_lines(frame, line_seg)
                 result = display_lines(result, average)
-        else:
             if self.masks["normalized"] is True:
-                result = Canny_cropped(result, 225)
+                result = Canny_cropped(frame, 145)
+        else:
             if self.masks["lines"] is True:
                 cropped = Canny_cropped(result, 225)
                 line_seg = HoughLine(cropped, 90)
                 average = average_lines(result, line_seg)
                 result = display_lines(result, average)
+            if self.masks["normalized"] is True:
+                result = Canny_cropped(result, 225)
         self.result = result
 
     def run(self):
