@@ -108,11 +108,9 @@ class Visualizer(pyglet.window.Window):
         # L pour activer/désactiver l'affichage des lignes
         if symbol == key.L:
             self.masks["lines"] = self.masks["lines"] is not True
-            print(self.masks["lines"])
         # N pout activer/désactiver  l'affichage de l'image normalisée
         if symbol == key.N:
             self.masks["normalized"] = self.masks["normalized"] is not True
-            print(self.masks["normalized"])
 
     def on_close(self):
         sys.exit(0)
@@ -136,15 +134,14 @@ class Visualizer(pyglet.window.Window):
     def show(self, result):
 
         frame = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
-        if self.masks["lines"] is True:
-            cropped = Canny_cropped(frame)
-            line_seg = HoughLine(cropped);
-            average = average_lines(frame, line_seg)
-            result = display_lines(result, average)
-            pass
+
         if self.masks["normalized"] is True:
             result = Canny_cropped(frame)
-            pass
+        if self.masks["lines"] is True:
+            cropped = Canny_cropped(frame)
+            line_seg = HoughLine(cropped)
+            average = average_lines(frame, line_seg)
+            result = display_lines(result, average)
         self.result = result
 
     def run(self):
