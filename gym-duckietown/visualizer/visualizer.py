@@ -16,11 +16,11 @@ def Cropped(result):
 
     return cropped_edges
 
-def Canny_cropped(frame):
+def Canny_cropped(frame, min_color):
     
     blur = cv2.bilateralFilter(frame,9,75,75)
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-    lower_red = np.array([0, 0, 145])
+    lower_red = np.array([0, 0, min_color])
     upper_red = np.array([255, 255, 255])
     mask = cv2.inRange(hsv, lower_red, upper_red)
     edges = cv2.Canny(mask, 200, 400)
@@ -28,11 +28,11 @@ def Canny_cropped(frame):
 
     return cropped_edges
 
-def HoughLine(cropped_edges):
+def HoughLine(cropped_edges, threshold):
     
     rho = 1
     angle = np.pi / 180
-    min_threshold = 60
+    min_threshold = threshold
     line_segments = cv2.HoughLinesP(cropped_edges, rho, angle, min_threshold, np.array([]), minLineLength=10, maxLineGap=2000)
 
     return line_segments
@@ -133,15 +133,23 @@ class Visualizer(pyglet.window.Window):
 
     def show(self, result):
 
-        frame = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
-
-        if self.masks["normalized"] is True:
-            result = Canny_cropped(frame)
-        if self.masks["lines"] is True:
-            cropped = Canny_cropped(frame)
-            line_seg = HoughLine(cropped)
-            average = average_lines(frame, line_seg)
-            result = display_lines(result, average)
+        if self.duckietown is True:
+            frame = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
+            if self.masks["normalized"] is True:
+                result = Canny_cropped(frame, 145)
+            if self.masks["lines"] is True:
+                cropped = Canny_cropped(frame, 145)
+                line_seg = HoughLine(cropped, 60)
+                average = average_lines(frame, line_seg)
+                result = display_lines(result, average)
+        else:
+            if self.masks["normalized"] is True:
+                result = Canny_cropped(result, 230)
+            if self.masks["lines"] is True:
+                cropped = Canny_cropped(result, 230)
+                line_seg = HoughLine(cropped, 120)
+                average = average_lines(result, line_seg)
+                result = display_lines(result, average)
         self.result = result
 
     def run(self):
