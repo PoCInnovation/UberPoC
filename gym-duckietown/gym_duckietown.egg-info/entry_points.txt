@@ -1,3 +1,0 @@
-[console_scripts]
-duckietown-start-gym = gym_duckietown.launcher:main
-
