@@ -3,7 +3,7 @@
 
 
 ## Description
-UberPoC is an autonomous car able to follow lines on the ground, detect signaling, traffic lights and pedestrians.
+UberPoC is an autonomous car able to follow lines on the ground, detect signs, traffic lights and pedestrians.
 
 
 
