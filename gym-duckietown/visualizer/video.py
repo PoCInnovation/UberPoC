@@ -1,5 +1,4 @@
 import sys
-import os
 from visualizer import visualizer
 
 import pyglet
