@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
+
 import cv2
 import imutils
+
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 image = cv2.imread('road2.jpg')
