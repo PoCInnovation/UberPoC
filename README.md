@@ -48,3 +48,4 @@ $ ./app.py --duckietown
 
  - [Thomas Michel](https://github.com/pr0m3th3usEx)
  - [Ugo Levi--Cescutti](https://github.com/ugo94490)
+ - [Théo Rocchetti](https://github.com/DCMaker76)
