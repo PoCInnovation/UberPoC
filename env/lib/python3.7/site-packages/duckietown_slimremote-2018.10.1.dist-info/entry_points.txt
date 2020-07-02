@@ -1,0 +1,5 @@
+[console_scripts]
+duckietown-start-robot = duckietown_slimremote.robot.server:main
+duckietown-start-robot2 = duckietown_slimremote.robot.server2:main
+duckietown-stop-robot = duckietown_slimremote.robot.server:stop
+
