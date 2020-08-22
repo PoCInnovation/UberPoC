@@ -18,7 +18,7 @@ class App:
     def parse(self):
         args = self.parser.parse_args()
         if sys.argv[1] == "sign_detection":
-            from visualizer.SignVisualizer import SignVisualizer
+            from .visualizer.SignVisualizer import SignVisualizer
             print(args)
             if args.cam:
                 vis = SignVisualizer(target="cam")
@@ -26,10 +26,10 @@ class App:
                 vis = SignVisualizer(target=args.img)
         else:
             if args.duckietown:
-                from visualizer.controlled import ControlledVisualizer
+                from .visualizer.controlled import ControlledVisualizer
                 vis = ControlledVisualizer("Duckietown-udem1-v0")
             elif args.video_name is not None:
-                from visualizer.video import VideoVisualizer
+                from .visualizer.video import VideoVisualizer
                 vis = VideoVisualizer(args.video_name)
             else:
                 self.help()
