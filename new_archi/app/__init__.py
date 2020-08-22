@@ -1,5 +1,3 @@
-#! /usr/bin/env python3
-
 import argparse
 import sys
 
@@ -19,7 +17,7 @@ class App:
 
     def parse(self):
         args = self.parser.parse_args()
-        if len(sys.argv) > 2 and sys.argv[1] == "sign_detection":
+        if sys.argv[1] == "sign_detection":
             from visualizer.SignVisualizer import SignVisualizer
             print(args)
             if args.cam:
@@ -42,15 +40,3 @@ class App:
     def help():
         print("Image treatment Visualizer")
         print("Usage: ./app.py [--video_name path_to_vid | --duckietown]")
-
-if __name__ == '__main__':
-    try:
-        app = App()
-        app.config_parser().parse()
-    except ValueError as e:
-        print(e)
-    except FileNotFoundError as e:
-        print(e)
-
-
-
