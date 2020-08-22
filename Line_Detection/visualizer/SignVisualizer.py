@@ -29,7 +29,7 @@ class SignMedia:
                 return None
         else:
             frame = self.media.copy()
-
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         ### You need to apply the SignDetection AI on this part and return frame with the predict
 
         return frame
