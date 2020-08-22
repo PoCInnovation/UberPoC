@@ -94,9 +94,10 @@ def display_lines(frame, lines):
 
 class Visualizer(pyglet.window.Window):
 
-    def __init__(self, duckietown = False):
+    def __init__(self, duckietown=False, sign=False):
         super().__init__(640, 480, visible=False)
         self.duckietown = duckietown
+        self.sign = sign
         self.frame_rate = 24
         self.result = None
         self.masks = {"lines": False, "normalized": False}
@@ -132,24 +133,26 @@ class Visualizer(pyglet.window.Window):
             self.cv2glet(cv2.cvtColor(self.result, cv2.COLOR_RGB2BGR)).blit(0, 0)
 
     def show(self, result):
-
-        if self.duckietown is True:
-            frame = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
-            if self.masks["lines"] is True:
-                cropped = Canny_cropped(frame, 145)
-                line_seg = HoughLine(cropped, 60)
-                average = average_lines(frame, line_seg)
-                result = display_lines(result, average)
-            if self.masks["normalized"] is True:
-                result = Canny_cropped(frame, 145)
+        if self.sign is False:
+            if self.duckietown is True:
+                frame = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
+                if self.masks["lines"] is True:
+                    cropped = Canny_cropped(frame, 145)
+                    line_seg = HoughLine(cropped, 60)
+                    average = average_lines(frame, line_seg)
+                    result = display_lines(result, average)
+                if self.masks["normalized"] is True:
+                    result = Canny_cropped(frame, 145)
+            else:
+                if self.masks["lines"] is True:
+                    cropped = Canny_cropped(result, 225)
+                    line_seg = HoughLine(cropped, 90)
+                    average = average_lines(result, line_seg)
+                    result = display_lines(result, average)
+                if self.masks["normalized"] is True:
+                    result = Canny_cropped(result, 225)
         else:
-            if self.masks["lines"] is True:
-                cropped = Canny_cropped(result, 225)
-                line_seg = HoughLine(cropped, 90)
-                average = average_lines(result, line_seg)
-                result = display_lines(result, average)
-            if self.masks["normalized"] is True:
-                result = Canny_cropped(result, 225)
+            pass
         self.result = result
 
     def run(self):

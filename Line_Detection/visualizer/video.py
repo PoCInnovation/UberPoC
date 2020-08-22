@@ -41,3 +41,4 @@ class VideoVisualizer(visualizer.Visualizer):
 
     def __del__(self):
         self.cap.release()
+
