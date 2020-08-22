@@ -16,11 +16,17 @@ UberPoC is an autonomous car able to follow lines on the ground, detect signs, t
 
 
 ## Quick Start
-
+If you want to try Line Detection System through a video or the Duckietown Simulator :
 ```
 $ ./app.py --video-name [video.mp4]
 or
 $ ./app.py --duckietown
+```
+If you want to try Sign Detection over an image or your Camera:
+```
+$ ./app.py sign_detection --cam
+or
+$ ./app.py sign_detection --img [img.png]
 ```
 
 
@@ -33,7 +39,6 @@ $ ./app.py --duckietown
 
 - Line Detection : Displays the lines on the ground while the car is driving.
 - Pedestrian Detection: Circle the pedestrians and cyclists on an image.
-
 
 
 ### Future
