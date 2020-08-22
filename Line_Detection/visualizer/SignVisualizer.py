@@ -82,12 +82,17 @@ class SignMedia:
                 return None
         else:
             frame = self.media.copy()
+            inter = np.zeros(shape=(480, 640, 3), dtype=np.uint8)
+            inter[
+                int(inter.shape[0] / 2 - frame.shape[0] / 2):int(inter.shape[0] / 2 + frame.shape[0] / 2),
+                int(inter.shape[1] / 2 - frame.shape[1] / 2):int(inter.shape[1] / 2 + frame.shape[1] / 2)
+            ] = frame
+            frame = inter.copy()
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
         model=load_model('model.h5')
         font = cv2.FONT_HERSHEY_SIMPLEX
         threshold = 0.75
-        ### You need to apply the SignDetection AI on this part and return frame with the predict
+        ## You need to apply the SignDetection AI on this part and return frame with the predict
         img = np.asarray(frame)
         img = cv2.resize(img, (32, 32))
         img = preprocessing(img)
@@ -97,9 +102,11 @@ class SignMedia:
         predictions = model.predict(img)
         classIndex = model.predict_classes(img)
         probabilityValue =np.amax(predictions)
+        print(probabilityValue)
+        print(str(getClassName(classIndex)))
         if probabilityValue > threshold:
-            cv2.putText(frame,str(classIndex)+" "+str(getClassName(classIndex)), (120, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
-            cv2.putText(frame, str(round(probabilityValue*100,2) )+"%", (180, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+             cv2.putText(frame,str(classIndex)+" "+str(getClassName(classIndex)), (120, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+             cv2.putText(frame, str(round(probabilityValue*100,2) )+"%", (180, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
         return frame
 
     def __str__(self):
@@ -132,7 +139,8 @@ class SignVisualizer(visualizer.Visualizer):
         return
 
     def run(self):
-        fps = self.signMedia.media.get(cv2.CAP_PROP_FPS) if str(self.signMedia) == "cam" else 24
+        #fps = self.signMedia.media.get(cv2.CAP_PROP_FPS) if str(self.signMedia) == "cam" else 5
+        fps = 24 if str(self.signMedia) == "cam" else 0.9
         pyglet.clock.schedule_interval(self.update, 1.0 / fps)
         super().run()
 
