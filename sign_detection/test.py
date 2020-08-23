@@ -21,17 +21,12 @@ cap.set(10, brightness)
 # IMPORT THE TRANNIED MODEL
 model=load_model('model.h5')
  
-def grayscale(img):
-    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    return img
-def equalize(img):
-    img =cv2.equalizeHist(img)
-    return img
 def preprocessing(img):
-    img = grayscale(img)
-    img = equalize(img)
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    img = cv2.equalizeHist(img)
     img = img/255
     return img
+
 def getClassName(classNo):
     if   classNo == 0: return 'Speed Limit 20 km/h'
     elif classNo == 1: return 'Speed Limit 30 km/h'
