@@ -1,0 +1,3 @@
+[submodule "new_archi/gym_duckietown"]
+	path = new_archi/gym_duckietown
+	url = https://github.com/duckietown/gym-duckietown.git
