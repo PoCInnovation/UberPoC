@@ -82,14 +82,8 @@ class SignMedia:
                 return None
         else:
             frame = self.media.copy()
-            inter = np.zeros(shape=(480, 640, 3), dtype=np.uint8)
-            inter[
-                int(inter.shape[0] / 2 - frame.shape[0] / 2):int(inter.shape[0] / 2 + frame.shape[0] / 2),
-                int(inter.shape[1] / 2 - frame.shape[1] / 2):int(inter.shape[1] / 2 + frame.shape[1] / 2)
-            ] = frame
-            frame = inter.copy()
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        model=load_model('model.h5')
+        model = load_model('model.h5')
         font = cv2.FONT_HERSHEY_SIMPLEX
         threshold = 0.75
         ## You need to apply the SignDetection AI on this part and return frame with the predict
@@ -97,6 +91,12 @@ class SignMedia:
         img = cv2.resize(img, (32, 32))
         img = preprocessing(img)
         img = img.reshape(1, 32, 32, 1)
+        inter = np.zeros(shape=(480, 640, 3), dtype=np.uint8)
+        inter[
+            int(inter.shape[0] / 2 - frame.shape[0] / 2):int(inter.shape[0] / 2 + frame.shape[0] / 2),
+            int(inter.shape[1] / 2 - frame.shape[1] / 2):int(inter.shape[1] / 2 + frame.shape[1] / 2)
+        ] = frame
+        frame = inter.copy()
         cv2.putText(frame, "CLASS: " , (20, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
         cv2.putText(frame, "PROBABILITY: ", (20, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
         predictions = model.predict(img)
