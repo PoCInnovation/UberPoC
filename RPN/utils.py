@@ -76,8 +76,8 @@ def draw_anchors(img_path, anchors, pad_size=50):
         draw.rectangle(a,outline=(255,0,0), fill=None)
     return a4im
 
-def generate_anchors(base_width=16, base_height=16, ratios=[0.5, 1, 2],
-                     scales=np.asarray([3,6,12])):
+def generate_anchors(base_width=10, base_height=10, ratios=[0.3, 1, 2],
+                     scales=np.asarray([1,3,14])):
     """
     Generate anchor (reference) windows by enumerating aspect ratios X
     scales wrt a reference (0, 0, w_stride-1, h_stride-1) window.
