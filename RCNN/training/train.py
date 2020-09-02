@@ -18,6 +18,8 @@ from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
 from keras.utils import to_categorical
+from sklearn.preprocessing import LabelBinarizer
+from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
@@ -38,12 +40,36 @@ class RCNN():
             horizontal_flip=True,
             fill_mode="nearest"
         )
-
+        self.trainX, self.trainY = None, None
+        self.testX, self.testY = None, None
 #        self.build_model()
 
     def load_dataset(self):
         imagePaths = list(paths.list_images(config.BASE_PATH))
+        data = []
+        labels = []
 
+        for imagePath in imagePaths:
+            label = imagePath.split(os.path.sep)[-2]
+            image = load_img(imagePath, target_size=config.INPUT_DIMS)
+            image = img_to_array(image)
+            image = preprocess_input(image)
+
+            data.append(image)
+            labels.append(label)
+        data = np.array(data, dtype="float32")
+        labels = np.array(labels)
+        lb = LabelBinarizer()
+        labels = lb.fit_transform(labels)
+        labels = to_categorical(labels)
+
+        (self.trainX, self.trainY, self.testX, self.testY) = train_test_split(
+            data, labels,
+            test_size=0.20,
+            startify=labels,
+            random_state=42
+        )
+        return self
 
     def build_model(self):
         headModel = self.baseModel.output
@@ -70,10 +96,10 @@ class RCNN():
     def train(self):
         print("[+] Model is training...")
         H = self.model.fit(
-            self.aug.flow(...),
-            steps_per_epoch=...,
-            validation_data=(),
-            validation_steps=(),
+            self.aug.flow(self.trainX, self.trainY, batch_size=self.bs),
+            steps_per_epoch=len(self.trainX) // self.bs,
+            validation_data=(self.testX, self.testY),
+            validation_steps=len(self.testX) // self.bs,
             epochs=self.epochs
         )
         return self
