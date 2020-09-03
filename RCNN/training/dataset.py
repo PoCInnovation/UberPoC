@@ -70,31 +70,42 @@ class DatasetBuilder:
             proposedRects = self.runSS(image)
             positiveROIs = 0
             negativeROIs = 0
-            for proposedRect in proposedRects:
-                (propStartX, propStartY, propEndX, propEndY) = proposedRect
-                for gtBox in gtBoxes:
-                    iou = compute_iou(gtBox[1:], proposedRect)
-                    (label, gtStartX, gtStartY, gtEndX, gtEndY) = gtBox
 
-                    roi = None
-                    outputPath = None
+            if len(gtBoxes) == 0:
+                filename = f"{self.counters[self.get_counter_index('nothing')]['counter']}.png"
+                outputPath = os.path.sep.join([config.LABELS_PATH[self.get_counter_index('nothing')], filename])
+                roi = cv2.resize(image, config.INPUT_DIMS, interpolation=cv2.INTER_CUBIC)
+                cv2.imwrite(outputPath, roi)
+                self.counters[self.get_counter_index('nothing')]['counter'] += 1
+            else:
+                for proposedRect in proposedRects:
+                    (propStartX, propStartY, propEndX, propEndY) = proposedRect
 
-                    if iou > 0.7 and positiveROIs <= config.MAX_POSITIVE:
-                        roi = image[propStartY:propEndY, propStartX:propEndX]
-                        filename = f"{self.counters[self.get_counter_index(label)]['counter']}.png"
-                        outputPath = os.path.sep.join([config.LABELS_PATH[self.get_counter_index(label)], filename])
-                        positiveROIs += 1
-                        self.counters[self.get_counter_index(label)]['counter'] += 1
-
-                    if not self.isFullOverlap(gtBox, proposedRect) and iou < 0.05 and negativeROIs <= config.MAX_NEGATIVE:
-                        roi = image[propStartY:propEndY, propStartX:propEndX]
+                    for gtBox in gtBoxes:
+                        iou = compute_iou(gtBox[1:], proposedRect)
+                        (label, gtStartX, gtStartY, gtEndX, gtEndY) = gtBox
                         filename = f"{self.counters[self.get_counter_index('nothing')]['counter']}.png"
-                        outputPath = os.path.sep.join([config.LABELS_PATH[self.get_counter_index(label)], filename])
                         negativeROIs += 1
 
-                    if roi is not None and outputPath is not None:
-                        roi = cv2.resize(roi, config.INPUT_DIMS, interpolation=cv2.INTER_CUBIC)
-                        cv2.imwrite(outputPath, roi)
+                        roi = None
+                        outputPath = None
+
+                        if iou > 0.7 and positiveROIs <= config.MAX_POSITIVE:
+                            roi = image[propStartY:propEndY, propStartX:propEndX]
+                            filename = f"{self.counters[self.get_counter_index(label)]['counter']}.png"
+                            outputPath = os.path.sep.join([config.LABELS_PATH[self.get_counter_index(label)], filename])
+                            positiveROIs += 1
+                            self.counters[self.get_counter_index(label)]['counter'] += 1
+
+                        if not self.isFullOverlap(gtBox, proposedRect) and iou < 0.05 and negativeROIs <= config.MAX_NEGATIVE:
+                            roi = image[propStartY:propEndY, propStartX:propEndX]
+                            filename = f"{self.counters[self.get_counter_index('nothing')]['counter']}.png"
+                            outputPath = os.path.sep.join([config.LABELS_PATH[self.get_counter_index(label)], filename])
+                            negativeROIs += 1
+
+                        if roi is not None and outputPath is not None:
+                            roi = cv2.resize(roi, config.INPUT_DIMS, interpolation=cv2.INTER_CUBIC)
+                            cv2.imwrite(outputPath, roi)
 
     def prepare_dataset(self):
         for _dir in config.LABELS_PATH:

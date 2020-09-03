@@ -20,8 +20,9 @@ from keras.preprocessing.image import load_img
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-
+import matplotlib.pyplot as plt
 
 
 class RCNN():
@@ -42,7 +43,9 @@ class RCNN():
         )
         self.trainX, self.trainY = None, None
         self.testX, self.testY = None, None
-#        self.build_model()
+        self.H = None
+        self.lb = None
+        self.build_model()
 
     def load_dataset(self):
         imagePaths = list(paths.list_images(config.BASE_PATH))
@@ -59,14 +62,13 @@ class RCNN():
             labels.append(label)
         data = np.array(data, dtype="float32")
         labels = np.array(labels)
-        lb = LabelBinarizer()
-        labels = lb.fit_transform(labels)
+        self.lb = LabelBinarizer()
+        labels = self.lb.fit_transform(labels)
         labels = to_categorical(labels)
-
-        (self.trainX, self.trainY, self.testX, self.testY) = train_test_split(
+        (self.trainX, self.testX, self.trainY, self.testY) = train_test_split(
             data, labels,
             test_size=0.20,
-            startify=labels,
+            stratify=labels,
             random_state=42
         )
         return self
@@ -95,7 +97,7 @@ class RCNN():
 
     def train(self):
         print("[+] Model is training...")
-        H = self.model.fit(
+        self.H = self.model.fit(
             self.aug.flow(self.trainX, self.trainY, batch_size=self.bs),
             steps_per_epoch=len(self.trainX) // self.bs,
             validation_data=(self.testX, self.testY),
@@ -104,5 +106,45 @@ class RCNN():
         )
         return self
 
+    def evaluate(self):
+        print("[INFO] evaluating network...")
+        predIdxs = self.model.predict(self.testX, batch_size=self.bs)
+
+        # for each image in the testing set we need to find the index of the
+        # label with corresponding largest predicted probability
+        predIdxs = np.argmax(predIdxs, axis=1)
+
+        # show a nicely formatted classification report
+        print(classification_report(self.testY.argmax(axis=1), predIdxs,
+                                    target_names=self.lb.classes_))
+
+        # serialize the model to disk
+        print("[+] saving mask detector model...")
+        self.model.save(config.MODEL_PATH, save_format="h5")
+
+        # serialize the label encoder to disk
+        print("[+] saving label encoder...")
+        f = open(config.ENCODER_PATH, "wb")
+        f.write(pickle.dumps(self.lb))
+        f.close()
+
+        # plot the training loss and accuracy
+        N = self.epochs
+        plt.style.use("ggplot")
+        plt.figure()
+        plt.plot(np.arange(0, N), self.H.history["loss"], label="train_loss")
+        plt.plot(np.arange(0, N), self.H.history["val_loss"], label="val_loss")
+        plt.plot(np.arange(0, N), self.H.history["accuracy"], label="train_acc")
+        plt.plot(np.arange(0, N), self.H.history["val_accuracy"], label="val_acc")
+        plt.title("Training Loss and Accuracy")
+        plt.xlabel("Epoch #")
+        plt.ylabel("Loss/Accuracy")
+        plt.legend(loc="lower left")
+        plt.savefig('test.png')
+
+
 myRcnn = RCNN()
 myRcnn.load_dataset()
+myRcnn.compile()
+myRcnn.train()
+myRcnn.evaluate()
