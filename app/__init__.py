@@ -13,6 +13,8 @@ class App:
         parser_sign = sign_detection_subparser.add_parser('sign_detection')
         parser_sign.add_argument('--cam', action="store_true", default=None)
         parser_sign.add_argument("--img", default=None)
+        parser_human = sign_detection_subparser.add_parser('human_detection')
+        parser_human.add_argument("--img", default=None)
         return self
 
     def parse(self):
@@ -24,6 +26,10 @@ class App:
                 vis = SignVisualizer(target="cam")
             if args.img is not None:
                 vis = SignVisualizer(target=args.img)
+        elif sys.argv[1] == "human_detection":
+            from .visualizer.human import HumanVisualiser
+            if args.img is not None:
+                vis = HumanVisualiser(target=args.img)
         else:
             if args.duckietown:
                 from .visualizer.controlled import ControlledVisualizer
