@@ -22,7 +22,7 @@ args = vars(ap.parse_args())
 
 # load the our fine-tuned model and label binarizer from disk
 print("[INFO] loading model and label binarizer...")
-model = load_model(config.MODEL_PATH)
+model = load_model(config.MODEL_OPTI_PATH)
 lb = pickle.loads(open(config.ENCODER_PATH, "rb").read())
 
 # load the input image from disk

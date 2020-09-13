@@ -17,5 +17,6 @@ MAX_NEGATIVE = 10
 INPUT_DIMS = (224,224)
 
 MODEL_PATH = "sign_detector.h5"
+MODEL_OPTI_PATH = "models/sign_detector.optimized.h5"
 ENCODER_PATH = "label_encoder.pickle"
 MIN_PROBA = 0.99
