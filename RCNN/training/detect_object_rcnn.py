@@ -86,24 +86,6 @@ proba = proba[idxs][:, 1]
 idxs = np.where(proba >= config.MIN_PROBA)
 boxes = boxes[idxs]
 proba = proba[idxs]
-
-# clone the original image so that we can draw on it
-clone = image.copy()
-
-# loop over the bounding boxes and associated probabilities
-for (box, prob) in zip(boxes, proba):
-	# draw the bounding box, label, and probability on the image
-	(startX, startY, endX, endY) = box
-	cv2.rectangle(clone, (startX, startY), (endX, endY),
-		(0, 255, 0), 2)
-	y = startY - 10 if startY - 10 > 10 else startY + 10
-	text= "Raccoon: {:.2f}%".format(prob * 100)
-	cv2.putText(clone, text, (startX, y),
-		cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
-
-# show the output after *before* running NMS
-cv2.imshow("Before NMS", clone)
-
 # run non-maxima suppression on the bounding boxes
 boxIdxs = non_max_suppression(boxes, proba)
 
@@ -114,7 +96,7 @@ for i in boxIdxs:
 	cv2.rectangle(image, (startX, startY), (endX, endY),
 		(0, 255, 0), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
-	text= "Raccoon: {:.2f}%".format(proba[i] * 100)
+	text= "Stop Sign: {:.2f}%".format(proba[i] * 100)
 	cv2.putText(image, text, (startX, y),
 		cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
 

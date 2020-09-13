@@ -84,13 +84,13 @@ class DatasetBuilder:
                     for gtBox in gtBoxes:
                         iou = compute_iou(gtBox[1:], proposedRect)
                         (label, gtStartX, gtStartY, gtEndX, gtEndY) = gtBox
-                        filename = f"{self.counters[self.get_counter_index('nothing')]['counter']}.png"
-                        negativeROIs += 1
+                        #filename = f"{self.counters[self.get_counter_index('nothing')]['counter']}.png"
+                        #negativeROIs += 1
 
                         roi = None
                         outputPath = None
 
-                        if iou > 0.7 and positiveROIs <= config.MAX_POSITIVE:
+                        if iou > 0.7 and positiveROIs <= config.MAX_POSITIVE and label == "stop_sign":
                             roi = image[propStartY:propEndY, propStartX:propEndX]
                             filename = f"{self.counters[self.get_counter_index(label)]['counter']}.png"
                             outputPath = os.path.sep.join([config.LABELS_PATH[self.get_counter_index(label)], filename])
