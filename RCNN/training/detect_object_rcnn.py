@@ -1,3 +1,4 @@
+#!/usr/bin/python3.6
 # USAGE
 # python detect_object_rcnn.py --image images/raccoon_01.jpg
 
