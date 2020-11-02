@@ -39,13 +39,13 @@ $ ./app.py sign_detection --img [img.png]
 
 - Line Detection : Displays the lines on the ground while the car is driving.
 - Pedestrian Detection: Circle the pedestrians and cyclists on an image.
+- Detection and recognition of road signs : Circle and name traffic signs
 
 
 ### Future
 
-- Detection and recognition of road signs : Circle and name traffic signs
-- Detection and recognition of traffic lights : Circle and name traffic light
 - Auto pilot : Combine all the features in order to have an autonomous car
+- More road signs and traffic lights : Find dataset of others signs and traffic lights to train AI
 
 
 
