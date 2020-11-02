@@ -45,4 +45,6 @@ class App:
     @staticmethod
     def help():
         print("Image treatment Visualizer")
-        print("Usage: ./app.py [--video_name path_to_vid | --duckietown]")
+        print("Usage: ./app.py [--video-name path_to_vid | --duckietown]")
+        print("       ./app.py sign_detection [--cam | --img path_to_img.png]")
+        print("       ./app.py human_detection --img path_to_img.png")

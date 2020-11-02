@@ -21,19 +21,23 @@ If you want to try Line Detection System through a video or the Duckietown Simul
 $ ./app.py --video-name [video.mp4]
 or
 $ ./app.py --duckietown
-```
+```  
+  You can press ``L`` to toggle line detection  
+  You can also use ``N`` to see different step of normalization
+&nbsp;
+  
 If you want to try Sign Detection over an image or your Camera:
 ```
 $ ./app.py sign_detection --cam
 or
 $ ./app.py sign_detection --img [img.png]
 ```
-
-
+To try Human Detection over an image:
+```
+$ ./app.py human_detection --img [img.png]
+```
 
 ## Features
-
-
 
 ### Implemented
 
@@ -47,6 +51,12 @@ $ ./app.py sign_detection --img [img.png]
 - Auto pilot : Combine all the features in order to have an autonomous car
 - More road signs and traffic lights : Find dataset of others signs and traffic lights to train AI
 
+
+## Description of each features
+
+### Line Detection
+
+We get image or video frame by frame, we cropped the top of the image to get 
 
 
 ## Authors
