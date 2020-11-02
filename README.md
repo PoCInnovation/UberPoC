@@ -18,22 +18,22 @@ UberPoC is an autonomous software able to detect lines on the ground, detect sig
 ## Quick Start
 If you want to try Line Detection System through a video or the Duckietown Simulator :
 ```
-$ ./app.py --video-name [video.mp4]
+$ ./run.py --video-name [video.mp4]
 or
-$ ./app.py --duckietown
+$ ./run.py --duckietown
 ```  
   You can press ``L`` to toggle line detection  
   You can also use ``N`` to see different step of normalization
   
 If you want to try Sign Detection over an image or your Camera:
 ```
-$ ./app.py sign_detection --cam
+$ ./run.py sign_detection --cam
 or
-$ ./app.py sign_detection --img [img.png]
+$ ./run.py sign_detection --img [img.png]
 ```
 To try Human Detection over an image:
 ```
-$ ./app.py human_detection --img [img.png]
+$ ./run.py human_detection --img [img.png]
 ```
 
 ## Features
