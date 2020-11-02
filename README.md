@@ -24,7 +24,6 @@ $ ./app.py --duckietown
 ```  
   You can press ``L`` to toggle line detection  
   You can also use ``N`` to see different step of normalization
-&nbsp;
   
 If you want to try Sign Detection over an image or your Camera:
 ```
@@ -56,8 +55,21 @@ $ ./app.py human_detection --img [img.png]
 
 ### Line Detection
 
-We get image or video frame by frame, we cropped the top of the image to get 
+  - We cut the top of the image in order to gain precision by having only the bottom with the lines
+  - Then we apply a red filter on the image to better differentiate the white lines from the rest of the image
+  - Using the Canny function of OpenCV, the lines are cut
+  - Using the HoughLinesP function we get an array with the different points that make up the lines
+  - With these arrays the lines are estimated and displayed on the screen
 
+### Pedestrians Detection
+
+- To detect the pedestrians on a road we use a function of OpenCV (HOGDescriptor_getDefaultPeopleDetector()) who get all the regions of each person on an image
+- Then we iterate on these regions and display a rectangle around each pedestrian
+
+### Traffic Signs Detection
+- To detect the different traffic signs present on an image or video, we use an AI based on a particular model the "Faster R-CNN" (Region-based Convolutional Neural Networks)
+- AI will scan the full image of small regions to be able to detect a sign on the image
+- Once the sign is found it will identify it and then surround it on the image with its accuracy rate and type 
 
 ## Authors
 
