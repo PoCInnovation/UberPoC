@@ -14,6 +14,16 @@ UberPoC is an autonomous software able to detect lines on the ground, detect sig
  $ cd UberPoc
 ```
 
+### Python package dependencies:
+
+- `imutils`
+- `numpy`
+- `matplotlib`
+- `opencv-contrib-python`
+- `tensorflow`
+- `scikit-learn`
+- `keras`
+- `beautifulsoup4`
 
 ## Quick Start
 If you want to try Line Detection System through a video or the Duckietown Simulator :
