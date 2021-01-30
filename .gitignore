@@ -5,3 +5,5 @@ DATASET.zip
 signs
 dataset
 .vscode
+*.h5
+__pycache__
