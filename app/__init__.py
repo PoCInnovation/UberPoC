@@ -21,7 +21,6 @@ class App:
         args = self.parser.parse_args()
         if sys.argv[1] == "sign_detection":
             from .visualizer.SignVisualizer import SignVisualizer
-            print(args)
             if args.cam:
                 vis = SignVisualizer(target="cam")
             if args.img is not None:

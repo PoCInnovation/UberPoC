@@ -16,6 +16,7 @@ UberPoC is an autonomous software able to detect lines on the ground, detect sig
 
 ### Python package dependencies:
 
+- `pyglet`
 - `imutils`
 - `numpy`
 - `matplotlib`

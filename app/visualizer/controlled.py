@@ -5,9 +5,8 @@ from pyglet.window import key
 from pyglet.gl import *
 
 import numpy as np
-
+from gym_duckietown.envs import DuckietownEnv
 import gym
-import gym_duckietown
 
 
 class ControlledVisualizer(Visualizer):
